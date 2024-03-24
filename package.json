@@ -1,0 +1,24 @@
+{
+  "name": "learning-graphql-3",
+  "version": "1.0.0",
+  "description": "### Commands ``` npm init npm install apollo-server --save ```",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hidemiura11/learning-graphql-3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hidemiura11/learning-graphql-3/issues"
+  },
+  "homepage": "https://github.com/hidemiura11/learning-graphql-3#readme",
+  "dependencies": {
+    "apollo-server": "^3.13.0",
+    "graphql": "^16.8.1",
+    "PubSub": "^4.0.0"
+  }
+}
