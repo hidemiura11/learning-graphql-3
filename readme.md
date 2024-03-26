@@ -13,5 +13,6 @@ Vue 2
 ```
 vue create apollo-client
 cd apollo-client
+vue add apollo
 npm run serve
 ```
