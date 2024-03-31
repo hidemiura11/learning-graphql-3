@@ -14,6 +14,7 @@ apollo-client
 vue create apollo-client // Vue 2
 cd apollo-client
 vue add apollo
+npm install --save-dev @babel/plugin-transform-runtime
 vue add vuetify
 npm run serve
 ```
