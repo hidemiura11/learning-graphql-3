@@ -1,18 +1,28 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div v-for="post in posts" :key="post.id">
+      {{ post.title}}/{{ post.author}}
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { ALL_POSTS } from "./graphql/post-query"
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  name: "App",
+  data: () => ({
+    //本棚の中身を定義
+    posts: [],
+  }),
+  apollo: {
+    //本棚の中身
+    posts: {
+      //クエリを書いている部分
+      query: ALL_POSTS,
+    }
+  },
+  methods: {}
 }
 </script>
 
