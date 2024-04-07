@@ -8,6 +8,7 @@
 
 <script>
 import { ALL_POSTS } from "./graphql/post-query"
+// import { CREATE_POST, UPDATE_POST, DELETE_POST } from "./graphql/post-mutation";
 
 export default {
   name: "App",
@@ -27,6 +28,7 @@ export default {
 </script>
 
 <style>
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
