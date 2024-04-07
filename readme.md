@@ -31,3 +31,15 @@ query {
   }
 }
 ```
+
+```
+mutation {
+  deletePost (
+    id: 2
+  ) {
+    id
+    title
+    author
+  }
+}
+```
