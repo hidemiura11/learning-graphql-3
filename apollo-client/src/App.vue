@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div v-show="loading">Loading now...</div>
     <div v-for="post in posts" :key="post.id">
       {{ post.title}}/{{ post.author}}
       <button @click="deletePost(post.id,post.title)">Delete</button>
@@ -17,6 +18,7 @@ export default {
   data: () => ({
     //本棚の中身を定義
     posts: [],
+    loading: false,
   }),
   apollo: {
     //本棚の中身
@@ -30,6 +32,7 @@ export default {
       if (!confirm(title + ' Delete?')) {
         return
       }
+      this.loading = true
       this.$apollo.mutate({
         mutation: DELETE_POST,
         variables: {
@@ -45,6 +48,10 @@ export default {
             }
           }
         })
+        setTimeout(() => {
+          console.log("Delayed for 10 second.");
+        }, "10000");
+        this.loading = false
       }).catch((error) => {
         console.error(error)
       })
