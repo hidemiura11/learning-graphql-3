@@ -1,5 +1,18 @@
 <template>
   <div id="app">
+    <div class="tool-bar">
+      <div>Book List</div>
+      <button @click="showDialogNew">Add New</button>
+    </div>
+    <div v-show="dialog">
+      <form>
+        <label>Title: </label>
+        <input type="text" /><br>
+        <label>Author: </label>
+        <input type="text" /><br>
+        <button>Add</button>
+      </form>
+    </div>
     <div v-show="loading">Loading now...</div>
     <div v-for="post in posts" :key="post.id">
       {{ post.title}}/{{ post.author}}
@@ -18,6 +31,7 @@ export default {
   data: () => ({
     //本棚の中身を定義
     posts: [],
+    dialog: false,
     loading: false,
   }),
   apollo: {
@@ -55,7 +69,10 @@ export default {
       }).catch((error) => {
         console.error(error)
       })
-    }
+    },
+    showDialogNew: function () {
+      this.dialog = true
+    },
   }
 }
 </script>
@@ -69,5 +86,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.tool-bar {
+  display: flex;
+  justify-content: center;
 }
 </style>
