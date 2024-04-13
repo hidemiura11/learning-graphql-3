@@ -2,7 +2,8 @@
   <div id="app">
     <div class="tool-bar">
       <div>Book List</div>
-      <button @click="showDialogNew">Add New</button>
+      <button @click="showDialogNew" v-show="!dialog">Add New</button>
+      <button @click="hideDialogNew" v-show="dialog">Hide</button>
     </div>
     <div v-show="dialog">
       <form>
@@ -72,6 +73,9 @@ export default {
     },
     showDialogNew: function () {
       this.dialog = true
+    },
+    hideDialogNew: function () {
+      this.dialog = false
     },
   }
 }
