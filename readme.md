@@ -43,3 +43,18 @@ mutation {
   }
 }
 ```
+
+```
+mutation {
+  createPost (
+    data: {
+      title: "GraphQL",
+      author: "Google",
+    }
+  ) {
+    id
+    title
+    author
+  }
+}
+```

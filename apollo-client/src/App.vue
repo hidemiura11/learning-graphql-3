@@ -2,17 +2,15 @@
   <div id="app">
     <div class="tool-bar">
       <div>Book List</div>
-      <button @click="showDialogNew" v-show="!dialog">Add New</button>
-      <button @click="hideDialogNew" v-show="dialog">Hide</button>
+      <button @click="showAddNew" v-show="!showInput">Add New</button>
+      <button @click="hideAddNew" v-show="showInput">Hide</button>
     </div>
-    <div v-show="dialog">
-      <form>
-        <label>Title: </label>
-        <input type="text" /><br>
-        <label>Author: </label>
-        <input type="text" /><br>
-        <button>Add</button>
-      </form>
+    <div v-show="showInput">
+      <label>Title: </label>
+      <input type="text" v-model="inputForm.title"/><br>
+      <label>Author: </label>
+      <input type="text" v-model="inputForm.author"/><br>
+      <button @click="createPost">Add</button>
     </div>
     <div v-show="loading">Loading now...</div>
     <div v-for="post in posts" :key="post.id">
@@ -24,7 +22,8 @@
 
 <script>
 import { ALL_POSTS } from "./graphql/post-query"
-import { DELETE_POST } from "./graphql/post-mutation";
+// import { DELETE_POST } from "./graphql/post-mutation";
+import { CREATE_POST, DELETE_POST } from "./graphql/post-mutation";
 // import { CREATE_POST, UPDATE_POST, DELETE_POST } from "./graphql/post-mutation";
 
 export default {
@@ -32,7 +31,12 @@ export default {
   data: () => ({
     //本棚の中身を定義
     posts: [],
-    dialog: false,
+    inputForm: {
+      id: '',
+      title: '',
+      author: '',
+    },
+    showInput: false,
     loading: false,
   }),
   apollo: {
@@ -43,6 +47,29 @@ export default {
     }
   },
   methods: {
+    createPost: function () {
+      this.loading = true
+      this.$apollo.mutate({
+        mutation: CREATE_POST,
+        variables: {
+          title: this.inputForm.title,
+          author: this.inputForm.author,
+        }
+      }).then(() => {
+        //UIの更新
+        this.$apollo.queries.posts.fetchMore({
+          updateQuery: (previousResult, {fetchMoreResult}) => {
+            return {
+              posts: fetchMoreResult.posts
+            }
+          }
+        })
+        this.showInput = false
+        this.loading = false
+      }).catch((error) => {
+        console.error(error)
+      })
+    },
     deletePost: function (id, title) {
       if (!confirm(title + ' Delete?')) {
         return
@@ -63,19 +90,16 @@ export default {
             }
           }
         })
-        setTimeout(() => {
-          console.log("Delayed for 10 second.");
-        }, "10000");
         this.loading = false
       }).catch((error) => {
         console.error(error)
       })
     },
-    showDialogNew: function () {
-      this.dialog = true
+    showAddNew: function () {
+      this.showInput = true
     },
-    hideDialogNew: function () {
-      this.dialog = false
+    hideAddNew: function () {
+      this.showInput = false
     },
   }
 }
