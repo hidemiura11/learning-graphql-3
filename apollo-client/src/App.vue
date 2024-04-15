@@ -22,7 +22,6 @@
 
 <script>
 import { ALL_POSTS } from "./graphql/post-query"
-// import { DELETE_POST } from "./graphql/post-mutation";
 import { CREATE_POST, DELETE_POST } from "./graphql/post-mutation";
 // import { CREATE_POST, UPDATE_POST, DELETE_POST } from "./graphql/post-mutation";
 
@@ -56,14 +55,7 @@ export default {
           author: this.inputForm.author,
         }
       }).then(() => {
-        //UIの更新
-        this.$apollo.queries.posts.fetchMore({
-          updateQuery: (previousResult, {fetchMoreResult}) => {
-            return {
-              posts: fetchMoreResult.posts
-            }
-          }
-        })
+        this.updatePost()
         this.showInput = false
         this.loading = false
       }).catch((error) => {
@@ -81,18 +73,21 @@ export default {
           id: id
         }
       }).then(() => {
-        this.$apollo.queries.posts.fetchMore({
-          updateQuery: (previousResult, {fetchMoreResult}) => {
-            console.log(previousResult)  //変更前
-            console.log(fetchMoreResult) //変更後
-            return {
-              posts: fetchMoreResult.posts
-            }
-          }
-        })
+        this.updatePost()
         this.loading = false
       }).catch((error) => {
         console.error(error)
+      })
+    },
+    updatePost: function () {
+      this.$apollo.queries.posts.fetchMore({
+        updateQuery: (previousResult, {fetchMoreResult}) => {
+          console.log(previousResult)  //変更前
+          console.log(fetchMoreResult) //変更後
+          return {
+            posts: fetchMoreResult.posts
+          }
+        }
       })
     },
     showAddNew: function () {
