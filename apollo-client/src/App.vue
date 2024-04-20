@@ -10,8 +10,8 @@
       <input type="text" v-model="inputForm.title"/><br>
       <label>Author: </label>
       <input type="text" v-model="inputForm.author"/><br>
-      <button v-if="!isEdit" @click="createPost">Add</button>
-      <button v-if="isEdit">Edit</button>
+      <button v-if="!isEdit" @click="addPost">Add</button>
+      <button v-if="isEdit" @click="editPost">Edit</button>
     </div>
     <div v-show="loading">Loading now...</div>
     <div v-for="post in posts" :key="post.id">
@@ -24,8 +24,7 @@
 
 <script>
 import { ALL_POSTS } from "./graphql/post-query"
-import { CREATE_POST, DELETE_POST } from "./graphql/post-mutation";
-// import { CREATE_POST, UPDATE_POST, DELETE_POST } from "./graphql/post-mutation";
+import { CREATE_POST, UPDATE_POST, DELETE_POST } from "./graphql/post-mutation";
 
 export default {
   name: "App",
@@ -49,13 +48,30 @@ export default {
     }
   },
   methods: {
-    createPost: function () {
+    addPost: function () {
       this.loading = true
       this.$apollo.mutate({
         mutation: CREATE_POST,
         variables: {
           title: this.inputForm.title,
           author: this.inputForm.author,
+        }
+      }).then(() => {
+        this.updatePost()
+        this.showInput = false
+        this.loading = false
+      }).catch((error) => {
+        console.error(error)
+      })
+    },
+    editPost: function () {
+      this.loading = true
+      this.$apollo.mutate({
+        mutation: UPDATE_POST,
+        variables: {
+          id: this.inputForm.id,
+            title: this.inputForm.title,
+            author: this.inputForm.author,
         }
       }).then(() => {
         this.updatePost()
