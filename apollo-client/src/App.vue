@@ -10,11 +10,13 @@
       <input type="text" v-model="inputForm.title"/><br>
       <label>Author: </label>
       <input type="text" v-model="inputForm.author"/><br>
-      <button @click="createPost">Add</button>
+      <button v-if="!isEdit" @click="createPost">Add</button>
+      <button v-if="isEdit">Edit</button>
     </div>
     <div v-show="loading">Loading now...</div>
     <div v-for="post in posts" :key="post.id">
       {{ post.title}}/{{ post.author}}
+      <button @click="showEdit(post.id, post.title, post.author)">Edit</button>
       <button @click="deletePost(post.id,post.title)">Delete</button>
     </div>
   </div>
@@ -36,6 +38,7 @@ export default {
       author: '',
     },
     showInput: false,
+    isEdit: false,
     loading: false,
   }),
   apollo: {
@@ -92,10 +95,18 @@ export default {
     },
     showAddNew: function () {
       this.showInput = true
+      this.isEdit = false
     },
     hideAddNew: function () {
       this.showInput = false
     },
+    showEdit: function (id, title, author) {
+      this.inputForm.id = id
+      this.inputForm.title = title
+      this.inputForm.author = author
+      this.showInput = true
+      this.isEdit = true
+    }
   }
 }
 </script>
