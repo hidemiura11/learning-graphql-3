@@ -25,6 +25,7 @@
 <script>
 import { ALL_POSTS } from "./graphql/post-query"
 import { CREATE_POST, UPDATE_POST, DELETE_POST } from "./graphql/post-mutation";
+import {SUBSCRIPTION_POST} from "./graphql/post-subscription";
 
 export default {
   name: "App",
@@ -45,6 +46,25 @@ export default {
     posts: {
       //クエリを書いている部分
       query: ALL_POSTS,
+      subscribeToMore: {
+        document: SUBSCRIPTION_POST,
+        updateQuery:(previousResult, { subscriptionData }) =>{
+            // console.log(previousResult) //前の投稿
+            // console.log(subscriptionData.data) //新規作成した投稿
+            // 既存の投稿と同一の投稿がなかった場合、新規作成した投稿を本棚に追加
+          if (previousResult.posts.find(post => post.id === subscriptionData.data.post.data.id)) {
+            return previousResult
+          } else {
+            return {
+              posts: [
+                ...previousResult.posts,
+                // Add the new data
+                subscriptionData.data.post.data,
+              ],
+            }
+          }
+        }
+      }
     }
   },
   methods: {
